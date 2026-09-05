@@ -1,0 +1,2744 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tasbih Digital</title>
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Font Imports */
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        /* Variables */
+        :root {
+            --primary-color: #2E8B57;
+            --secondary-color: #1E5631;
+            --accent-color: #4CAF50;
+            --light-color: #E8F5E9;
+            --dark-color: #1B1B1B;
+            --gold-color: #D4AF37;
+            --gradient-primary: linear-gradient(135deg, #2E8B57, #1E5631);
+            --gradient-gold: linear-gradient(135deg, #D4AF37, #AA8C2C);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-circle: 50%;
+            --font-arabic: 'Amiri', serif;
+            --font-primary: 'Poppins', sans-serif;
+            --transition-default: all 0.3s ease;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: var(--font-primary);
+            background-color: #f5f5f5;
+            color: var(--dark-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .header-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background-color: white;
+            border-radius: var(--radius-circle);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--primary-color);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px 0;
+        }
+
+        /* Card Component */
+        .card {
+            background-color: white;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+            transition: var(--transition-default);
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        .card-header {
+            padding: 15px;
+            background: var(--primary-color);
+            color: white;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h2 {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Tasbih Counter */
+        .tasbih-counter-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tasbih-counter-wrapper {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .tasbih-counter {
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 20px 0;
+            user-select: none;
+        }
+
+        .tasbih-counter-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12rem;
+            opacity: 0.06;
+            color: var(--primary-color);
+            pointer-events: none;
+            user-select: none;
+            font-family: var(--font-arabic);
+        }
+
+        .tasbih-phrase {
+            margin: 20px 0;
+            text-align: center;
+            user-select: none;
+        }
+
+        .arabic-text {
+            font-family: var(--font-arabic);
+            font-size: 1.8rem;
+            line-height: 1.8;
+            direction: rtl;
+            margin-bottom: 10px;
+            color: var(--gold-color);
+        }
+
+        .transliteration {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+            opacity: 0.85;
+        }
+
+        .translation {
+            font-size: 0.85rem;
+            color: var(--dark-color);
+            opacity: 0.75;
+            font-style: italic;
+        }
+
+        /* Tasbih Button */
+        .tasbih-button-container {
+            text-align: center;
+            padding: 20px 0;
+            position: relative;
+        }
+
+        .tasbih-button {
+            width: 180px;
+            height: 180px;
+            border-radius: var(--radius-circle);
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            user-select: none;
+        }
+
+        .tasbih-button:active {
+            transform: scale(0.95);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .pulse-animation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px;
+            height: 180px;
+            border-radius: var(--radius-circle);
+            background-color: rgba(46, 139, 87, 0.3);
+            z-index: -1;
+            animation: pulse 1.5s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.7;
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.2;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .tasbih-button-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .control-button {
+            padding: 10px 15px;
+            border-radius: var(--radius-sm);
+            border: none;
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition-default);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .control-button:active {
+            transform: scale(0.95);
+        }
+
+        .control-button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .control-icon {
+            font-size: 1.1rem;
+        }
+
+        /* Dhikr Selection */
+        .dhikr-selection {
+            margin: 20px 0;
+        }
+
+        .dhikr-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .dhikr-item {
+            padding: 15px;
+            border-radius: var(--radius-sm);
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            cursor: pointer;
+            transition: var(--transition-default);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .dhikr-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .dhikr-item:active {
+            transform: scale(0.98);
+        }
+
+        .dhikr-item-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .dhikr-item-count {
+            font-size: 0.8rem;
+            opacity: 0.75;
+        }
+
+        /* Stats Card */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-item {
+            padding: 15px;
+            background-color: var(--light-color);
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--dark-color);
+            opacity: 0.75;
+        }
+
+        /* Target Card */
+        .target-slider-container {
+            margin: 20px 0;
+        }
+
+        .target-slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .target-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            background: var(--light-color);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .target-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .target-progress {
+            margin-top: 15px;
+            height: 8px;
+            background-color: var(--light-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .target-percentage {
+            text-align: right;
+            margin-top: 5px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* History Card */
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-item-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-dhikr {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+        }
+
+        .history-time {
+            font-size: 0.75rem;
+            opacity: 0.6;
+        }
+
+        .history-count {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .empty-history {
+            text-align: center;
+            padding: 30px 0;
+            color: rgba(0, 0, 0, 0.4);
+            font-style: italic;
+        }
+
+        /* Settings Card */
+        .settings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .setting-label {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .setting-description {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-top: 3px;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Theme Selector */
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .theme-option {
+            width: 30px;
+            height: 30px;
+            border-radius: var(--radius-circle);
+            cursor: pointer;
+            transition: var(--transition-default);
+        }
+
+        .theme-option:active {
+            transform: scale(0.9);
+        }
+
+        .theme-option.active {
+            box-shadow: 0 0 0 2px white, 0 0 0 4px var(--primary-color);
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-tab {
+            padding: 12px 0;
+            flex: 1;
+            text-align: center;
+            color: #777;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition-default);
+            user-select: none;
+        }
+
+        .nav-tab.active {
+            color: var(--primary-color);
+        }
+
+        .nav-tab-icon {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        /* Responsive Font Sizes */
+        @media (max-width: 400px) {
+            .tasbih-counter {
+                font-size: 4rem;
+            }
+
+            .arabic-text {
+                font-size: 1.5rem;
+            }
+
+            .tasbih-button {
+                width: 150px;
+                height: 150px;
+            }
+
+            .pulse-animation {
+                width: 150px;
+                height: 150px;
+            }
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scale-in {
+            animation: scaleIn 0.3s ease forwards;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Section Content */
+        .section-content {
+            display: none;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        /* Names of Allah */
+        .names-card-body {
+            padding: 0;
+        }
+
+        .name-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .name-item {
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: var(--transition-default);
+        }
+
+        .name-item:hover {
+            background-color: var(--light-color);
+        }
+
+        .name-arabic {
+            font-family: var(--font-arabic);
+            font-size: 1.5rem;
+            color: var(--gold-color);
+            margin-bottom: 5px;
+        }
+
+        .name-meaning {
+            font-size: 0.8rem;
+            color: var(--dark-color);
+        }
+
+        /* Name Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-default);
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: var(--radius-md);
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.9);
+            transition: var(--transition-default);
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 15px;
+            background: var(--gradient-primary);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-name-details {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-name-arabic {
+            font-family: var(--font-arabic);
+            font-size: 3rem;
+            color: var(--gold-color);
+        }
+
+        .modal-name-meaning {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin: 10px 0;
+        }
+
+        .modal-name-description {
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        /* Tutorial Overlay */
+        .tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: none;
+        }
+
+        .tutorial-overlay.active {
+            display: block;
+        }
+
+        .tutorial-step {
+            position: absolute;
+            color: white;
+            padding: 20px;
+            background-color: rgba(46, 139, 87, 0.9);
+            border-radius: var(--radius-md);
+            max-width: 80%;
+            box-shadow: var(--shadow-lg);
+            display: none;
+        }
+
+        .tutorial-step.active {
+            display: block;
+        }
+
+        .tutorial-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .tutorial-desc {
+            margin-bottom: 20px;
+        }
+
+        .tutorial-nav {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .tutorial-btn {
+            padding: 8px 15px;
+            background-color: white;
+            color: var(--primary-color);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 3000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.5s ease;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(46, 139, 87, 0.1);
+            border-left-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        /* Allah & Muhammad Display */
+        .islamic-names {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: var(--gradient-gold);
+            border-radius: var(--radius-md);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .islamic-name {
+            font-family: var(--font-arabic);
+            font-size: 2.5rem;
+            margin: 10px 0;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .islamic-name-meaning {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            z-index: 1500;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+            max-width: 90%;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(10px);
+        }
+
+        /* Custom Select */
+        .custom-select {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .select-button {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: var(--light-color);
+            border: none;
+            border-radius: var(--radius-sm);
+            text-align: left;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .select-button::after {
+            content: '▼';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.7rem;
+        }
+
+        .options-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-md);
+            z-index: 10;
+            margin-top: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .custom-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .custom-option:hover {
+            background-color: var(--light-color);
+        }
+
+        /* Custom Checkbox */
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkbox-mark {
+            height: 20px;
+            width: 20px;
+            background-color: #eee;
+            border-radius: 4px;
+            position: relative;
+            margin-right: 10px;
+        }
+
+        .custom-checkbox:hover .checkbox-mark {
+            background-color: #ccc;
+        }
+
+        .checkbox-input:checked ~ .checkbox-mark {
+            background-color: var(--primary-color);
+        }
+
+        .checkbox-mark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 7px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .checkbox-input:checked ~ .checkbox-mark:after {
+            display: block;
+        }
+
+        /* Help & Support */
+        .faq-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding-bottom: 15px;
+        }
+
+        .faq-question {
+            font-weight: 500;
+            margin-bottom: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            display: none;
+            padding-left: 5px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-item.active .faq-toggle::after {
+            content: "−";
+        }
+
+        .faq-toggle::after {
+            content: "+";
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p class="loading-text">Memuat Tasbih Digital...</p>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-logo">
+                <div class="logo-icon">☪</div>
+                <h1>Tasbih Digital</h1>
+            </div>
+            <p>Aplikasi Dzikir & Tasbih untuk Muslim</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Islamic Names Display -->
+            <div class="islamic-names">
+                <div class="islamic-name">الله</div>
+                <div class="islamic-name-meaning">Allah - Tuhan Yang Maha Esa</div>
+                <div class="islamic-name">محمد</div>
+                <div class="islamic-name-meaning">Muhammad - Rasulullah SAW</div>
+            </div>
+
+            <!-- Tasbih Counter Section -->
+            <div class="section-content active" id="tasbihSection">
+                <!-- Tasbih Counter Card -->
+                <div class="card tasbih-counter-card">
+                    <div class="card-header">
+                        <h2>Penghitung Tasbih</h2>
+                        <span id="targetDisplay">33</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="tasbih-counter-wrapper">
+                            <div class="tasbih-counter-bg">الله</div>
+                            <div class="tasbih-counter" id="counter">0</div>
+                        </div>
+                        <div class="tasbih-phrase">
+                            <div class="arabic-text" id="arabicText">سُبْحَانَ اللهِ</div>
+                            <div class="transliteration" id="transliteration">Subhanallah</div>
+                            <div class="translation" id="translation">Maha Suci Allah</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tasbih Button -->
+                <div class="tasbih-button-container">
+                    <div class="pulse-animation"></div>
+                    <button class="tasbih-button" id="tasbihButton">
+                        <span class="tasbih-button-icon">☪</span>
+                        <span>Tekan</span>
+                    </button>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <button class="control-button" id="resetButton">
+                        <span class="control-icon">↻</span>
+                        <span>Reset</span>
+                    </button>
+                    <button class="control-button" id="vibrateButton">
+                        <span class="control-icon">📳</span>
+                        <span>Getaran: Aktif</span>
+                    </button>
+                    <button class="control-button" id="soundButton">
+                        <span class="control-icon">🔊</span>
+                        <span>Suara: Aktif</span>
+                    </button>
+                    <button class="control-button" id="targetButton">
+                        <span class="control-icon">🎯</span>
+                        <span>Target: 33</span>
+                    </button>
+                </div>
+
+                <!-- Dhikr Selection -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Pilihan Dzikir</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="dhikr-grid">
+                            <div class="dhikr-item active" data-dhikr="subhanallah" data-arabic="سُبْحَانَ اللهِ" data-transliteration="Subhanallah" data-translation="Maha Suci Allah" data-target="33">
+                                <div class="dhikr-item-name">Subhanallah</div>
+                                <div class="dhikr-item-count">33×</div>
+                            </div>
+                            <div class="dhikr-item" data-dhikr="alhamdulillah" data-arabic="ٱلْحَمْدُ لِلَّٰهِ" data-transliteration="Alhamdulillah" data-translation="Segala puji bagi Allah" data-target="33">
+                                <div class="dhikr-item-name">Alhamdulillah</div>
+                                <div class="dhikr-item-count">33×</div>
+                            </div>
+                            <div class="dhikr-item" data-dhikr="allahuakbar" data-arabic="اللهُ أَكْبَرُ" data-transliteration="Allahu Akbar" data-translation="Allah Maha Besar" data-target="33">
+                                <div class="dhikr-item-name">Allahu Akbar</div>
+                                <div class="dhikr-item-count">33×</div>
+                            </div>
+                            <div class="dhikr-item" data-dhikr="lailahaillallah" data-arabic="لَا إِلَٰهَ إِلَّا ٱللَّٰهُ" data-transliteration="La ilaha illallah" data-translation="Tiada Tuhan selain Allah" data-target="100">
+                                <div class="dhikr-item-name">La ilaha illallah</div>
+                                <div class="dhikr-item-count">100×</div>
+                            </div>
+                            <div class="dhikr-item" data-dhikr="astagfirullah" data-arabic="أَسْتَغْفِرُ ٱللَّٰهَ" data-transliteration="Astagfirullah" data-translation="Aku mohon ampunan kepada Allah" data-target="100">
+                                <div class="dhikr-item-name">Astagfirullah</div>
+                                <div class="dhikr-item-count">100×</div>
+                            </div>
+                            <div class="dhikr-item" data-dhikr="salawat" data-arabic="اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ" data-transliteration="Allahumma salli 'ala Muhammad" data-translation="Ya Allah, limpahkanlah rahmat kepada Muhammad" data-target="100">
+                                <div class="dhikr-item-name">Salawat</div>
+                                <div class="dhikr-item-count">100×</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Statistik Harian</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value" id="todayTotal">0</div>
+                                <div class="stat-label">Total Hari Ini</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="todaySessions">0</div>
+                                <div class="stat-label">Sesi Hari Ini</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="weeklyTotal">0</div>
+                                <div class="stat-label">Total Minggu Ini</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="streak">0</div>
+                                <div class="stat-label">Hari Berturut-turut</div>
+                            </div>
+                        </div>
+
+                        <div class="target-slider-container">
+                            <h3>Target Harian</h3>
+                            <div class="target-slider-label">
+                                <span>0</span>
+                                <span id="dailyTargetDisplay">500</span>
+                            </div>
+                            <input type="range" min="100" max="1000" value="500" step="100" class="target-slider" id="dailyTargetSlider">
+                            <div class="target-progress">
+                                <div class="progress-bar" id="dailyProgressBar" style="width: 0%"></div>
+                            </div>
+                            <div class="target-percentage" id="dailyPercentage">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Section -->
+            <div class="section-content" id="historySection">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Riwayat Tasbih</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="custom-select">
+                            <button class="select-button" id="historyFilterButton">Semua Riwayat</button>
+                            <div class="options-list" id="historyFilterOptions">
+                                <div class="custom-option" data-value="all">Semua Riwayat</div>
+                                <div class="custom-option" data-value="today">Hari Ini</div>
+                                <div class="custom-option" data-value="yesterday">Kemarin</div>
+                                <div class="custom-option" data-value="week">Minggu Ini</div>
+                                <div class="custom-option" data-value="month">Bulan Ini</div>
+                            </div>
+                        </div>
+
+                        <div class="history-list" id="historyList">
+                            <!-- History items will be added here dynamically -->
+                            <div class="empty-history">Belum ada riwayat tasbih</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar View -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Kalender Aktivitas</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="calendarView">
+                            <!-- Calendar will be generated here -->
+                            <div style="text-align: center; padding: 30px 0; color: rgba(0, 0, 0, 0.4);">
+                                Kalender aktivitas akan muncul setelah Anda mulai bertasbih secara rutin
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Names Section -->
+            <div class="section-content" id="namesSection">
+                <!-- 99 Names of Allah -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>99 Nama Allah (Asmaul Husna)</h2>
+                    </div>
+                    <div class="card-body names-card-body">
+                        <div class="name-grid" id="namesGrid">
+                            <!-- First 9 names as an example -->
+                            <div class="name-item" data-name-id="1">
+                                <div class="name-arabic">الرَّحْمَنُ</div>
+                                <div class="name-meaning">Ar-Rahman</div>
+                            </div>
+                            <div class="name-item" data-name-id="2">
+                                <div class="name-arabic">الرَّحِيمُ</div>
+                                <div class="name-meaning">Ar-Rahim</div>
+                            </div>
+                            <div class="name-item" data-name-id="3">
+                                <div class="name-arabic">الْمَلِكُ</div>
+                                <div class="name-meaning">Al-Malik</div>
+                            </div>
+                            <div class="name-item" data-name-id="4">
+                                <div class="name-arabic">الْقُدُّوسُ</div>
+                                <div class="name-meaning">Al-Quddus</div>
+                            </div>
+                            <div class="name-item" data-name-id="5">
+                                <div class="name-arabic">السَّلَامُ</div>
+                                <div class="name-meaning">As-Salam</div>
+                            </div>
+                            <div class="name-item" data-name-id="6">
+                                <div class="name-arabic">الْمُؤْمِنُ</div>
+                                <div class="name-meaning">Al-Mu'min</div>
+                            </div>
+                            <div class="name-item" data-name-id="7">
+                                <div class="name-arabic">الْمُهَيْمِنُ</div>
+                                <div class="name-meaning">Al-Muhaymin</div>
+                            </div>
+                            <div class="name-item" data-name-id="8">
+                                <div class="name-arabic">الْعَزِيزُ</div>
+                                <div class="name-meaning">Al-'Aziz</div>
+                            </div>
+                            <div class="name-item" data-name-id="9">
+                                <div class="name-arabic">الْجَبَّارُ</div>
+                                <div class="name-meaning">Al-Jabbar</div>
+                            </div>
+                            <!-- More names will be added dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dhikr Guide -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Panduan Dzikir</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="faq-item active">
+                            <div class="faq-question">
+                                <span>Dzikir Setelah Shalat</span>
+                                <span class="faq-toggle"></span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Setelah shalat fardhu, disunnahkan untuk membaca:</p>
+                                <ul style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Subhanallah (33x)</li>
+                                    <li>Alhamdulillah (33x)</li>
+                                    <li>Allahu Akbar (33x)</li>
+                                    <li>La ilaha illallahu wahdahu la syarikalah, lahul mulku wa lahul hamdu wa huwa 'ala kulli syai'in qadir (1x)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>Dzikir Pagi dan Petang</span>
+                                <span class="faq-toggle"></span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Dzikir pagi dibaca setelah Shalat Subuh hingga matahari terbit. Dzikir petang dibaca setelah Shalat Ashar hingga matahari terbenam. Bacaan yang dianjurkan:</p>
+                                <ul style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Membaca Ayat Kursi (1x)</li>
+                                    <li>Membaca Surat Al-Ikhlas, Al-Falaq, dan An-Nas (3x)</li>
+                                    <li>Membaca Subhanallah wa bihamdihi (100x)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>Keutamaan Dzikir</span>
+                                <span class="faq-toggle"></span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Beberapa keutamaan dzikir antara lain:</p>
+                                <ul style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Mendapat ketenangan hati</li>
+                                    <li>Mendapatkan ampunan dari Allah SWT</li>
+                                    <li>Dilindungi dari godaan syaitan</li>
+                                    <li>Meningkatkan derajat di sisi Allah SWT</li>
+                                    <li>Mendapat pahala yang berlipat ganda</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="section-content" id="settingsSection">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Pengaturan</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <div>
+                                    <div class="setting-label">Getaran</div>
+                                    <div class="setting-description">Nyalakan getaran saat tombol tasbih ditekan</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="vibrationToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div>
+                                    <div class="setting-label">Suara</div>
+                                    <div class="setting-description">Nyalakan suara saat tombol tasbih ditekan</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="soundToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div>
+                                    <div class="setting-label">Mode Gelap</div>
+                                    <div class="setting-description">Aktifkan tampilan gelap untuk kenyamanan mata</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="darkModeToggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div>
+                                    <div class="setting-label">Pengingat Dzikir</div>
+                                    <div class="setting-description">Aktifkan notifikasi pengingat dzikir harian</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="reminderToggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div>
+                                    <div class="setting-label">Tampilkan Translasi</div>
+                                    <div class="setting-description">Tampilkan arti dari bacaan dzikir</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="translationToggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div>
+                                    <div class="setting-label">Kunci Layar Tasbih</div>
+                                    <div class="setting-description">Cegah layar ponsel mati saat bertasbih</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="keepScreenOnToggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="setting-item">
+                                <div>
+                                    <div class="setting-label">Ukuran Huruf</div>
+                                    <div class="setting-description">Sesuaikan ukuran huruf bacaan dzikir</div>
+                                </div>
+                                <div class="controls" style="margin: 10px 0 0 0;">
+                                    <button class="control-button" id="fontSizeSmall">Kecil</button>
+                                    <button class="control-button active" id="fontSizeMedium">Sedang</button>
+                                    <button class="control-button" id="fontSizeLarge">Besar</button>
+                                </div>
+                            </div>
+                            <div class="setting-item">
+                                <div>
+                                    <div class="setting-label">Tema Aplikasi</div>
+                                    <div class="setting-description">Pilih warna tema aplikasi</div>
+                                </div>
+                                <div class="theme-selector">
+                                    <div class="theme-option active" style="background-color: #2E8B57;" data-theme="green"></div>
+                                    <div class="theme-option" style="background-color: #1976D2;" data-theme="blue"></div>
+                                    <div class="theme-option" style="background-color: #9C27B0;" data-theme="purple"></div>
+                                    <div class="theme-option" style="background-color: #D32F2F;" data-theme="red"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Bantuan & Dukungan</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>Cara Menggunakan Aplikasi</span>
+                                <span class="faq-toggle"></span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Untuk menggunakan aplikasi tasbih digital:</p>
+                                <ol style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Pilih jenis dzikir yang ingin Anda baca dari pilihan dzikir</li>
+                                    <li>Tekan tombol tasbih untuk menambah hitungan</li>
+                                    <li>Gunakan tombol reset untuk memulai dari awal</li>
+                                    <li>Aktifkan atau nonaktifkan getaran sesuai preferensi Anda</li>
+                                    <li>Atur target jumlah dzikir yang ingin dicapai</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>Fitur Tasbih</span>
+                                <span class="faq-toggle"></span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Aplikasi ini memiliki beberapa fitur utama:</p>
+                                <ul style="margin-left: 20px; margin-top: 10px;">
+                                    <li>Penghitung tasbih dengan berbagai pilihan dzikir</li>
+                                    <li>Getaran dan suara saat tombol ditekan</li>
+                                    <li>Pengaturan target jumlah dzikir</li>
+                                    <li>Statistik harian dan mingguan</li>
+                                    <li>Riwayat lengkap aktivitas tasbih</li>
+                                    <li>99 Nama Allah (Asmaul Husna)</li>
+                                    <li>Panduan dzikir</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>Masalah Umum</span>
+                                <span class="faq-toggle"></span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Berikut adalah solusi untuk masalah umum yang mungkin Anda temui:</p>
+                                <ul style="margin-left: 20px; margin-top: 10px;">
+                                    <li><strong>Getaran tidak berfungsi:</strong> Pastikan fitur getaran diaktifkan di pengaturan perangkat Anda.</li>
+                                    <li><strong>Suara tidak berfungsi:</strong> Periksa volume perangkat dan pastikan mode diam tidak aktif.</li>
+                                    <li><strong>Data hilang:</strong> Aplikasi menyimpan data secara lokal. Pastikan Anda tidak menghapus data browser atau cache.</li>
+                                    <li><strong>Notifikasi tidak muncul:</strong> Periksa pengaturan notifikasi di perangkat Anda dan berikan izin yang diperlukan.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>Tentang Aplikasi</span>
+                                <span class="faq-toggle"></span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Aplikasi Tasbih Digital v1.0</p>
+                                <p style="margin-top: 10px;">Aplikasi ini dibuat untuk membantu umat Muslim dalam melakukan dzikir dan bertasbih. Semua fitur dirancang untuk memudahkan ibadah sehari-hari.</p>
+                                <p style="margin-top: 10px;">© 2025 Tasbih Digital. Semua hak dilindungi.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="startTutorial" class="control-button" style="width: 100%; margin-top: 20px; margin-bottom: 50px;">
+                    <span class="control-icon">❓</span>
+                    <span>Mulai Tutorial</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Navigation -->
+    <footer class="footer">
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-section="tasbihSection">
+                <div class="nav-tab-icon">☪</div>
+                <div>Tasbih</div>
+            </div>
+            <div class="nav-tab" data-section="historySection">
+                <div class="nav-tab-icon">📊</div>
+                <div>Riwayat</div>
+            </div>
+            <div class="nav-tab" data-section="namesSection">
+                <div class="nav-tab-icon">📚</div>
+                <div>Dzikir</div>
+            </div>
+            <div class="nav-tab" data-section="settingsSection">
+                <div class="nav-tab-icon">⚙️</div>
+                <div>Pengaturan</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Name Detail Modal -->
+    <div class="modal" id="nameDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span id="modalNameTitle">Detail Nama Allah</span>
+                    <button class="modal-close" id="closeModal">&times;</button>
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="modal-name-details">
+                    <div class="modal-name-arabic" id="modalNameArabic">الرَّحْمَنُ</div>
+                    <div class="modal-name-meaning" id="modalNameMeaning">Ar-Rahman</div>
+                    <div class="modal-name-description" id="modalNameDescription">
+                        Yang Maha Pengasih. Allah SWT memberikan kasih sayang-Nya kepada semua makhluk tanpa terkecuali, baik mukmin maupun kafir, dalam urusan dunia.
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="control-button" id="useAsDhikrButton">
+                        <span class="control-icon">☪</span>
+                        <span>Gunakan sebagai Dzikir</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Target Setting Modal -->
+    <div class="modal" id="targetModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span>Atur Target Dzikir</span>
+                    <button class="modal-close" id="closeTargetModal">&times;</button>
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="target-slider-container">
+                    <div class="target-slider-label">
+                        <span>Target:</span>
+                        <span id="targetValue">33</span>
+                    </div>
+                    <input type="range" min="10" max="1000" value="33" step="1" class="target-slider" id="targetSlider">
+                </div>
+                <div class="controls" style="margin-top: 20px;">
+                    <button class="control-button" data-target="33">33</button>
+                    <button class="control-button" data-target="99">99</button>
+                    <button class="control-button" data-target="100">100</button>
+                    <button class="control-button" data-target="500">500</button>
+                </div>
+                <button class="control-button" id="saveTargetButton" style="width: 100%; margin-top: 20px;">
+                    <span>Simpan Target</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">Tasbih telah direset</div>
+
+    <!-- Tutorial Overlay -->
+    <div class="tutorial-overlay" id="tutorialOverlay">
+        <div class="tutorial-step" id="tutorialStep1" style="top: 100px; left: 50%; transform: translateX(-50%);">
+            <div class="tutorial-title">Selamat Datang di Tasbih Digital!</div>
+            <div class="tutorial-desc">Aplikasi ini membantu Anda bertasbih dan berdzikir dengan mudah. Mari kita lihat fitur-fiturnya!</div>
+            <div class="tutorial-nav">
+                <button class="tutorial-btn" id="tutorialSkip">Lewati</button>
+                <button class="tutorial-btn" id="tutorial1Next">Lanjut</button>
+            </div>
+        </div>
+        <div class="tutorial-step" id="tutorialStep2" style="top: 250px; left: 50%; transform: translateX(-50%);">
+            <div class="tutorial-title">Tombol Tasbih</div>
+            <div class="tutorial-desc">Tekan tombol ini untuk menambah hitungan tasbih Anda. Setiap kali ditekan, hitungan akan bertambah satu.</div>
+            <div class="tutorial-nav">
+                <button class="tutorial-btn" id="tutorial2Prev">Kembali</button>
+                <button class="tutorial-btn" id="tutorial2Next">Lanjut</button>
+            </div>
+        </div>
+        <div class="tutorial-step" id="tutorialStep3" style="top: 350px; left: 50%; transform: translateX(-50%);">
+            <div class="tutorial-title">Pilihan Dzikir</div>
+            <div class="tutorial-desc">Pilih jenis dzikir yang ingin Anda baca. Setiap dzikir memiliki target yang berbeda.</div>
+            <div class="tutorial-nav">
+                <button class="tutorial-btn" id="tutorial3Prev">Kembali</button>
+                <button class="tutorial-btn" id="tutorial3Next">Lanjut</button>
+            </div>
+        </div>
+        <div class="tutorial-step" id="tutorialStep4"
+        <div class="tutorial-step" id="tutorialStep4" style="top: 450px; left: 50%; transform: translateX(-50%);">
+            <div class="tutorial-title">Tombol Kontrol</div>
+            <div class="tutorial-desc">Gunakan tombol Reset untuk memulai ulang, aktifkan/nonaktifkan Getaran dan Suara, dan atur Target jumlah tasbih.</div>
+            <div class="tutorial-nav">
+                <button class="tutorial-btn" id="tutorial4Prev">Kembali</button>
+                <button class="tutorial-btn" id="tutorial4Next">Lanjut</button>
+            </div>
+        </div>
+        <div class="tutorial-step" id="tutorialStep5" style="bottom: 100px; left: 50%; transform: translateX(-50%);">
+            <div class="tutorial-title">Menu Navigasi</div>
+            <div class="tutorial-desc">Navigasi antara Tasbih, Riwayat, Dzikir, dan Pengaturan menggunakan tombol di bawah.</div>
+            <div class="tutorial-nav">
+                <button class="tutorial-btn" id="tutorial5Prev">Kembali</button>
+                <button class="tutorial-btn" id="tutorial5Next">Selesai</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ======== VARIABEL GLOBAL ========
+        let count = 0;
+        let currentTarget = 33;
+        let vibrationEnabled = true;
+        let soundEnabled = true;
+        let darkMode = false;
+        let selectedDhikr = "subhanallah";
+        let currentSection = "tasbihSection";
+        let history = [];
+        let dailyTarget = 500;
+        let dailyProgress = 0;
+        let todayTotal = 0;
+        let todaySessions = 0;
+        let weeklyTotal = 0;
+        let streak = 0;
+        let lastActiveDate = new Date().toLocaleDateString();
+        let translationEnabled = true;
+        let fontSizeClass = "medium"; // small, medium, large
+        let currentTheme = "green"; // green, blue, purple, red
+        let screenLockEnabled = false;
+        let reminderEnabled = false;
+        let wakeLock = null;
+
+        // Asmaulhusna data
+        const asmaNames = [
+            { id: 1, arabic: "الرَّحْمَنُ", latin: "Ar-Rahman", meaning: "Yang Maha Pengasih", description: "Allah SWT memberikan kasih sayang-Nya kepada semua makhluk tanpa terkecuali, baik mukmin maupun kafir, dalam urusan dunia." },
+            { id: 2, arabic: "الرَّحِيمُ", latin: "Ar-Rahim", meaning: "Yang Maha Penyayang", description: "Allah SWT memberikan kasih sayang-Nya khusus kepada orang-orang yang beriman dalam urusan dunia dan akhirat." },
+            { id: 3, arabic: "الْمَلِكُ", latin: "Al-Malik", meaning: "Yang Maha Merajai", description: "Allah SWT adalah Raja diraja yang menguasai dan memiliki alam semesta beserta isinya." },
+            { id: 4, arabic: "الْقُدُّوسُ", latin: "Al-Quddus", meaning: "Yang Maha Suci", description: "Allah SWT suci dari segala kekurangan, kesalahan, dan hal-hal yang tidak layak bagi-Nya." },
+            { id: 5, arabic: "السَّلَامُ", latin: "As-Salam", meaning: "Yang Maha Memberi Keselamatan", description: "Allah SWT adalah sumber keselamatan, memberi keselamatan pada seluruh makhluk-Nya." },
+            { id: 6, arabic: "الْمُؤْمِنُ", latin: "Al-Mu'min", meaning: "Yang Maha Memberi Keamanan", description: "Allah SWT memberikan rasa aman kepada semua makhluk-Nya dari kedzaliman." },
+            { id: 7, arabic: "الْمُهَيْمِنُ", latin: "Al-Muhaymin", meaning: "Yang Maha Mengawasi", description: "Allah SWT mengawasi dan memelihara segala sesuatu, serta menjadi saksi atas segala sesuatu." },
+            { id: 8, arabic: "الْعَزِيزُ", latin: "Al-'Aziz", meaning: "Yang Maha Perkasa", description: "Allah SWT memiliki keperkasaan dan kekuatan yang tidak dapat dikalahkan oleh siapapun." },
+            { id: 9, arabic: "الْجَبَّارُ", latin: "Al-Jabbar", meaning: "Yang Maha Perkasa", description: "Allah SWT dapat memaksa dan menjadikan seluruh makhluk-Nya tunduk kepada kehendak-Nya." }
+            // Data lengkap akan ditambahkan melalui JavaScript
+        ];
+
+        // Sound effects
+        const clickSound = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tAwAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAASAAAeMwAUFBQUFBQUFBQkJCQkJCQkJCQ0NDQ0NDQ0NDRERERERERERERUVFRUVFRUVFRkZGRkZGRkZGR0dHR0dHR0dHSEhISEhISEhISUlJSUlJSUlJSkpKSkpKSkpKS0tLS0tLS0tLS0xMTExMTExMTU1NTU1NTU1NTk5OTk5OTk5OT09PT09PT09PT///////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAYaAAAAAAAAHjOxza+SAAAAAAAAAAAAAAAAAAAAAP/7kMQAAAAAAGkAAAAAAAAA0gAAAAAATEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+
+        // Elements
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const counter = document.getElementById('counter');
+        const tasbihButton = document.getElementById('tasbihButton');
+        const resetButton = document.getElementById('resetButton');
+        const vibrateButton = document.getElementById('vibrateButton');
+        const soundButton = document.getElementById('soundButton');
+        const targetButton = document.getElementById('targetButton');
+        const targetDisplay = document.getElementById('targetDisplay');
+        const arabicText = document.getElementById('arabicText');
+        const transliteration = document.getElementById('transliteration');
+        const translation = document.getElementById('translation');
+        const dhikrItems = document.querySelectorAll('.dhikr-item');
+        const todayTotalEl = document.getElementById('todayTotal');
+        const todaySessionsEl = document.getElementById('todaySessions');
+        const weeklyTotalEl = document.getElementById('weeklyTotal');
+        const streakEl = document.getElementById('streak');
+        const dailyTargetSlider = document.getElementById('dailyTargetSlider');
+        const dailyTargetDisplay = document.getElementById('dailyTargetDisplay');
+        const dailyProgressBar = document.getElementById('dailyProgressBar');
+        const dailyPercentage = document.getElementById('dailyPercentage');
+        const historyList = document.getElementById('historyList');
+        const historyFilterButton = document.getElementById('historyFilterButton');
+        const historyFilterOptions = document.getElementById('historyFilterOptions');
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const sectionContents = document.querySelectorAll('.section-content');
+        const nameDetailModal = document.getElementById('nameDetailModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalNameTitle = document.getElementById('modalNameTitle');
+        const modalNameArabic = document.getElementById('modalNameArabic');
+        const modalNameMeaning = document.getElementById('modalNameMeaning');
+        const modalNameDescription = document.getElementById('modalNameDescription');
+        const useAsDhikrButton = document.getElementById('useAsDhikrButton');
+        const namesGrid = document.getElementById('namesGrid');
+        const notification = document.getElementById('notification');
+        const targetModal = document.getElementById('targetModal');
+        const closeTargetModal = document.getElementById('closeTargetModal');
+        const targetSlider = document.getElementById('targetSlider');
+        const targetValue = document.getElementById('targetValue');
+        const saveTargetButton = document.getElementById('saveTargetButton');
+        const targetQuickButtons = document.querySelectorAll('.control-button[data-target]');
+        const vibrationToggle = document.getElementById('vibrationToggle');
+        const soundToggle = document.getElementById('soundToggle');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const reminderToggle = document.getElementById('reminderToggle');
+        const translationToggle = document.getElementById('translationToggle');
+        const keepScreenOnToggle = document.getElementById('keepScreenOnToggle');
+        const fontSizeButtons = document.querySelectorAll('#fontSizeSmall, #fontSizeMedium, #fontSizeLarge');
+        const themeOptions = document.querySelectorAll('.theme-option');
+        const startTutorial = document.getElementById('startTutorial');
+        const tutorialOverlay = document.getElementById('tutorialOverlay');
+        const tutorialSteps = document.querySelectorAll('.tutorial-step');
+        const tutorialSkip = document.getElementById('tutorialSkip');
+        const faqQuestions = document.querySelectorAll('.faq-question');
+
+        // ======== EVENT LISTENERS ========
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulasi loading
+            setTimeout(function() {
+                loadingOverlay.style.opacity = '0';
+                setTimeout(function() {
+                    loadingOverlay.style.display = 'none';
+                }, 500);
+            }, 1500);
+
+            // Load data dari localStorage
+            loadAppData();
+
+            // Set event listeners
+            tasbihButton.addEventListener('click', incrementCounter);
+            resetButton.addEventListener('click', resetCounter);
+            vibrateButton.addEventListener('click', toggleVibration);
+            soundButton.addEventListener('click', toggleSound);
+            targetButton.addEventListener('click', openTargetModal);
+            
+            // Event listeners untuk pilihan dzikir
+            dhikrItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    selectDhikr(this.dataset.dhikr, 
+                               this.dataset.arabic, 
+                               this.dataset.transliteration, 
+                               this.dataset.translation,
+                               parseInt(this.dataset.target));
+                });
+            });
+
+            // Event listeners untuk navigasi
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    changeSection(this.dataset.section);
+                });
+            });
+
+            // Event listeners untuk daily target
+            dailyTargetSlider.addEventListener('input', function() {
+                updateDailyTarget(this.value);
+            });
+
+            // Event listener untuk history filter
+            historyFilterButton.addEventListener('click', function() {
+                toggleHistoryFilter();
+            });
+
+            document.addEventListener('click', function(e) {
+                // Close history filter if clicked outside
+                if (!historyFilterButton.contains(e.target) && !historyFilterOptions.contains(e.target)) {
+                    historyFilterOptions.style.display = 'none';
+                }
+            });
+
+            // Populate names grid with all 99 names
+            populateNamesGrid();
+
+            // Modal events
+            closeModal.addEventListener('click', closeNameModal);
+            useAsDhikrButton.addEventListener('click', useNameAsDhikr);
+
+            // Target modal events
+            closeTargetModal.addEventListener('click', function() {
+                targetModal.classList.remove('active');
+            });
+
+            targetSlider.addEventListener('input', function() {
+                targetValue.textContent = this.value;
+            });
+
+            saveTargetButton.addEventListener('click', function() {
+                setTarget(parseInt(targetSlider.value));
+                targetModal.classList.remove('active');
+            });
+
+            targetQuickButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetVal = parseInt(this.dataset.target);
+                    targetSlider.value = targetVal;
+                    targetValue.textContent = targetVal;
+                });
+            });
+
+            // Settings events
+            vibrationToggle.addEventListener('change', function() {
+                vibrationEnabled = this.checked;
+                updateVibrateButton();
+                saveAppData();
+            });
+
+            soundToggle.addEventListener('change', function() {
+                soundEnabled = this.checked;
+                updateSoundButton();
+                saveAppData();
+            });
+
+            darkModeToggle.addEventListener('change', function() {
+                darkMode = this.checked;
+                updateDarkMode();
+                saveAppData();
+            });
+
+            reminderToggle.addEventListener('change', function() {
+                reminderEnabled = this.checked;
+                setupReminders();
+                saveAppData();
+            });
+
+            translationToggle.addEventListener('change', function() {
+                translationEnabled = this.checked;
+                updateTranslationDisplay();
+                saveAppData();
+            });
+
+            keepScreenOnToggle.addEventListener('change', function() {
+                screenLockEnabled = this.checked;
+                toggleScreenWakeLock();
+                saveAppData();
+            });
+
+            // Font size buttons
+            fontSizeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    setFontSize(this.id.replace('fontSize', '').toLowerCase());
+                });
+            });
+
+            // Theme options
+            themeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    setTheme(this.dataset.theme);
+                });
+            });
+
+            // Tutorial
+            startTutorial.addEventListener('click', startTutorialOverlay);
+            tutorialSkip.addEventListener('click', closeTutorialOverlay);
+            
+            // Tutorial navigation
+            document.getElementById('tutorial1Next').addEventListener('click', () => showTutorialStep(2));
+            document.getElementById('tutorial2Prev').addEventListener('click', () => showTutorialStep(1));
+            document.getElementById('tutorial2Next').addEventListener('click', () => showTutorialStep(3));
+            document.getElementById('tutorial3Prev').addEventListener('click', () => showTutorialStep(2));
+            document.getElementById('tutorial3Next').addEventListener('click', () => showTutorialStep(4));
+            document.getElementById('tutorial4Prev').addEventListener('click', () => showTutorialStep(3));
+            document.getElementById('tutorial4Next').addEventListener('click', () => showTutorialStep(5));
+            document.getElementById('tutorial5Prev').addEventListener('click', () => showTutorialStep(4));
+            document.getElementById('tutorial5Next').addEventListener('click', closeTutorialOverlay);
+
+            // FAQ
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    this.parentElement.classList.toggle('active');
+                });
+            });
+
+            // Inisialisasi aplikasi
+            updateHistoryList();
+            updateStats();
+            checkAndUpdateStreak();
+        });
+
+        // ======== FUNGSI UTAMA ========
+
+        // Increment counter
+        function incrementCounter() {
+            count++;
+            counter.textContent = count;
+
+            // Vibration if enabled and supported
+            if (vibrationEnabled && navigator.vibrate) {
+                navigator.vibrate(40);
+            }
+
+            // Sound if enabled
+            if (soundEnabled) {
+                playClickSound();
+            }
+
+            // Check if target reached
+            if (count === currentTarget) {
+                showNotification("Target tercapai! (" + currentTarget + "×)");
+                if (vibrationEnabled && navigator.vibrate) {
+                    navigator.vibrate([100, 50, 100]);
+                }
+            }
+
+            // Update daily progress
+            updateDailyProgress();
+
+            // If this is first counter in this session, increment sessions
+            if (count === 1) {
+                todaySessions++;
+            }
+
+            // Update stats
+            todayTotal++;
+            weeklyTotal++;
+            updateStats();
+            
+            // Save data
+            saveAppData();
+        }
+
+        // Reset counter
+        function resetCounter() {
+            // Add to history if count > 0
+            if (count > 0) {
+                addToHistory();
+            }
+            
+            count = 0;
+            counter.textContent = count;
+            showNotification("Tasbih telah direset");
+            saveAppData();
+        }
+
+        // Toggle vibration
+        function toggleVibration() {
+            vibrationEnabled = !vibrationEnabled;
+            updateVibrateButton();
+            vibrationToggle.checked = vibrationEnabled;
+            
+            // Test vibration if enabled
+            if (vibrationEnabled && navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+            
+            saveAppData();
+        }
+
+        // Update vibrate button
+        function updateVibrateButton() {
+            if (vibrationEnabled) {
+                vibrateButton.innerHTML = '<span class="control-icon">📳</span><span>Getaran: Aktif</span>';
+                vibrateButton.classList.add('active');
+            } else {
+                vibrateButton.innerHTML = '<span class="control-icon">📳</span><span>Getaran: Nonaktif</span>';
+                vibrateButton.classList.remove('active');
+            }
+        }
+
+        // Toggle sound
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            updateSoundButton();
+            soundToggle.checked = soundEnabled;
+            
+            // Test sound if enabled
+            if (soundEnabled) {
+                playClickSound();
+            }
+            
+            saveAppData();
+        }
+
+        // Update sound button
+        function updateSoundButton() {
+            if (soundEnabled) {
+                soundButton.innerHTML = '<span class="control-icon">🔊</span><span>Suara: Aktif</span>';
+                soundButton.classList.add('active');
+            } else {
+                soundButton.innerHTML = '<span class="control-icon">🔇</span><span>Suara: Nonaktif</span>';
+                soundButton.classList.remove('active');
+            }
+        }
+
+        // Play click sound
+        function playClickSound() {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(e => {
+                // Autoplay restrictions might prevent sound from playing
+                console.log("Could not play sound: " + e);
+            });
+        }
+
+        // Open target modal
+        function openTargetModal() {
+            targetSlider.value = currentTarget;
+            targetValue.textContent = currentTarget;
+            targetModal.classList.add('active');
+        }
+
+        // Set target for counter
+        function setTarget(target) {
+            currentTarget = target;
+            targetDisplay.textContent = target;
+            targetButton.innerHTML = `<span class="control-icon">🎯</span><span>Target: ${target}</span>`;
+            showNotification(`Target diubah menjadi ${target}`);
+            saveAppData();
+        }
+
+        // Select dhikr
+        function selectDhikr(dhikr, arabic, latinText, translationText, target) {
+            // Update active class
+            dhikrItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.dhikr === dhikr) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Update display
+            arabicText.textContent = arabic;
+            transliteration.textContent = latinText;
+            translation.textContent = translationText;
+            
+            // Update selectedDhikr and target
+            selectedDhikr = dhikr;
+            setTarget(target);
+            
+            // Reset counter
+            if (count > 0) {
+                addToHistory();
+                count = 0;
+                counter.textContent = count;
+            }
+            
+            showNotification(`Dzikir diubah menjadi ${latinText}`);
+            saveAppData();
+        }
+
+        // Add current count to history
+        function addToHistory() {
+            const now = new Date();
+            
+            // Find active dhikr item
+            let dhikrName = "";
+            let dhikrArabic = "";
+            dhikrItems.forEach(item => {
+                if (item.classList.contains('active')) {
+                    dhikrName = item.querySelector('.dhikr-item-name').textContent;
+                    dhikrArabic = item.dataset.arabic;
+                }
+            });
+            
+            const historyItem = {
+                id: Date.now(),
+                dhikr: dhikrName,
+                arabic: dhikrArabic,
+                count: count,
+                date: now.toLocaleDateString(),
+                time: now.toLocaleTimeString(),
+                timestamp: now.getTime()
+            };
+            
+            history.unshift(historyItem);
+            
+            // Keep max 100 history items
+            if (history.length > 100) {
+                history.pop();
+            }
+            
+            updateHistoryList();
+            saveAppData();
+        }
+
+        // Update history list
+        function updateHistoryList(filter = 'all') {
+            // If history is empty
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="empty-history">Belum ada riwayat tasbih</div>';
+                return;
+            }
+            
+            // Filter history
+            let filteredHistory = history;
+            const today = new Date().toLocaleDateString();
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayDate = yesterday.toLocaleDateString();
+            
+            if (filter === 'today') {
+                filteredHistory = history.filter(item => item.date === today);
+            } else if (filter === 'yesterday') {
+                filteredHistory = history.filter(item => item.date === yesterdayDate);
+            } else if (filter === 'week') {
+                const oneWeekAgo = new Date();
+                oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+                filteredHistory = history.filter(item => new Date(item.date) >= oneWeekAgo);
+            } else if (filter === 'month') {
+                const oneMonthAgo = new Date();
+                oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+                filteredHistory = history.filter(item => new Date(item.date) >= oneMonthAgo);
+            }
+            
+            // If filtered history is empty
+            if (filteredHistory.length === 0) {
+                historyList.innerHTML = '<div class="empty-history">Tidak ada riwayat tasbih dalam periode ini</div>';
+                return;
+            }
+            
+            // Generate HTML
+            let html = '';
+            filteredHistory.forEach(item => {
+                html += `
+                    <div class="history-item">
+                        <div class="history-item-left">
+                            <div class="history-dhikr">${item.dhikr}</div>
+                            <div class="history-time">${item.date}, ${item.time}</div>
+                        </div>
+                        <div class="history-count">${item.count}×</div>
+                    </div>
+                `;
+            });
+            
+            historyList.innerHTML = html;
+        }
+
+        // Toggle history filter
+        function toggleHistoryFilter() {
+            if (historyFilterOptions.style.display === 'block') {
+                historyFilterOptions.style.display = 'none';
+            } else {
+                historyFilterOptions.style.display = 'block';
+            }
+            
+            // Add event listeners to options
+            document.querySelectorAll('.custom-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const value = this.dataset.value;
+                    historyFilterButton.textContent = this.textContent;
+                    updateHistoryList(value);
+                    historyFilterOptions.style.display = 'none';
+                });
+            });
+        }
+
+        // Change section
+        function changeSection(sectionId) {
+            // Update active nav tab
+            navTabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.section === sectionId) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            // Update visible section
+            sectionContents.forEach(section => {
+                section.classList.remove('active');
+                if (section.id === sectionId) {
+                    section.classList.add('active');
+                    section.classList.add('fade-in');
+                    setTimeout(() => {
+                        section.classList.remove('fade-in');
+                    }, 500);
+                }
+            });
+            
+            currentSection = sectionId;
+            saveAppData();
+        }
+
+        // Update daily target
+        function updateDailyTarget(value) {
+            dailyTarget = parseInt(value);
+            dailyTargetDisplay.textContent = dailyTarget;
+            updateDailyProgress();
+            saveAppData();
+        }
+
+        // Update daily progress
+        function updateDailyProgress() {
+            dailyProgress = todayTotal;
+            const percentage = Math.min(100, Math.round((dailyProgress / dailyTarget) * 100));
+            dailyProgressBar.style.width = percentage + '%';
+            dailyPercentage.textContent = percentage + '%';
+        }
+
+        // Update stats display
+        function updateStats() {
+            todayTotalEl.textContent = todayTotal;
+            todaySessionsEl.textContent = todaySessions;
+            weeklyTotalEl.textContent = weeklyTotal;
+            streakEl.textContent = streak;
+            
+            updateDailyProgress();
+        }
+
+        // Check and update streak
+        function checkAndUpdateStreak() {
+            const today = new Date().toLocaleDateString();
+            
+            if (lastActiveDate !== today) {
+                // Check if last active date was yesterday
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayDate = yesterday.toLocaleDateString();
+                
+                if (lastActiveDate === yesterdayDate) {
+                    // Active yesterday, streak continues
+                    streak++;
+                } else if (lastActiveDate !== '') {
+                    // Not active yesterday, streak resets
+                    streak = 1;
+                }
+                
+                // Reset daily counters
+                todayTotal = 0;
+                todaySessions = 0;
+                lastActiveDate = today;
+                
+                saveAppData();
+            }
+        }
+
+        // Populate names grid with all 99 names
+        function populateNamesGrid() {
+            let html = '';
+            asmaNames.forEach(name => {
+                html += `
+                    <div class="name-item" data-name-id="${name.id}">
+                        <div class="name-arabic">${name.arabic}</div>
+                        <div class="name-meaning">${name.latin}</div>
+                    </div>
+                `;
+            });
+            
+            namesGrid.innerHTML = html;
+            
+            // Add event listeners
+            document.querySelectorAll('.name-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    openNameModal(parseInt(this.dataset.nameId));
+                });
+            });
+        }
+
+        // Open name modal
+        function openNameModal(nameId) {
+            const name = asmaNames.find(n => n.id === nameId);
+            if (!name) return;
+            
+            modalNameTitle.textContent = name.latin;
+            modalNameArabic.textContent = name.arabic;
+            modalNameMeaning.textContent = name.latin + " - " + name.meaning;
+            modalNameDescription.textContent = name.description;
+            
+            // Store the current name for use as dhikr
+            useAsDhikrButton.dataset.arabic = name.arabic;
+            useAsDhikrButton.dataset.latin = name.latin;
+            useAsDhikrButton.dataset.meaning = name.meaning;
+            
+            nameDetailModal.classList.add('active');
+        }
+
+        // Close name modal
+        function closeNameModal() {
+            nameDetailModal.classList.remove('active');
+        }
+
+        // Use name as dhikr
+        function useNameAsDhikr() {
+            const arabic = useAsDhikrButton.dataset.arabic;
+            const latin = useAsDhikrButton.dataset.latin;
+            const meaning = useAsDhikrButton.dataset.meaning;
+            
+            // Reset counter if needed
+            if (count > 0) {
+                addToHistory();
+                count = 0;
+                counter.textContent = count;
+            }
+            
+            // Update display
+            arabicText.textContent = arabic;
+            transliteration.textContent = latin;
+            translation.textContent = meaning;
+            
+            // Update target
+            setTarget(99);
+            
+            // Change section to tasbih
+            changeSection('tasbihSection');
+            
+            // Close modal
+            closeNameModal();
+            
+            showNotification(`Dzikir diubah menjadi ${latin}`);
+        }
+
+        // Show notification
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Toggle dark mode
+        function updateDarkMode() {
+            if (darkMode) {
+                document.documentElement.style.setProperty('--primary-color', '#3BB078');
+                document.documentElement.style.setProperty('--secondary-color', '#2A8C61');
+                document.documentElement.style.setProperty('--accent-color', '#4EC68A');
+                document.documentElement.style.setProperty('--light-color', '#1E2D29');
+                document.documentElement.style.setProperty('--dark-color', '#E8E8E8');
+                document.body.style.backgroundColor = '#121212';
+                document.querySelectorAll('.card').forEach(card => {
+                    card.style.backgroundColor = '#1E1E1E';
+                });
+            } else {
+                document.documentElement.style.setProperty('--primary-color', '#2E8B57');
+                document.documentElement.style.setProperty('--secondary-color', '#1E5631');
+                document.documentElement.style.setProperty('--accent-color', '#4CAF50');
+                document.documentElement.style.setProperty('--light-color', '#E8F5E9');
+                document.documentElement.style.setProperty('--dark-color', '#1B1B1B');
+                document.body.style.backgroundColor = '#f5f5f5';
+                document.querySelectorAll('.card').forEach(card => {
+                    card.style.backgroundColor = 'white';
+                });
+            }
+        }
+
+        // Setup reminders
+        function setupReminders() {
+            if (!reminderEnabled) return;
+            
+            // Check if notifications are supported
+            if (!("Notification" in window)) {
+                showNotification("Browser Anda tidak mendukung notifikasi");
+                return;
+            }
+            
+            // Request permission
+            if (Notification.permission !== "granted") {
+                Notification.requestPermission();
+            }
+            
+            // We would set up actual reminders here
+            // This is just a placeholder as we can't actually schedule notifications in this demo
+            showNotification("Pengingat dzikir telah diaktifkan");
+        }
+
+        // Update translation display
+        function updateTranslationDisplay() {
+            if (translationEnabled) {
+                translation.style.display = 'block';
+            } else {
+                translation.style.display = 'none';
+            }
+        }
+
+        // Toggle screen wake lock
+        async function toggleScreenWakeLock() {
+            if (!screenLockEnabled) {
+                if (wakeLock) {
+                    try {
+                        await wakeLock.release();
+                        wakeLock = null;
+                    } catch (err) {
+                        console.error(`${err.name}, ${err.message}`);
+                    }
+                }
+                return;
+            }
+            
+            // Check if wake lock is supported
+            if ('wakeLock' in navigator) {
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    showNotification("Layar akan tetap menyala saat bertasbih");
+                    
+                    wakeLock.addEventListener('release', () => {
+                        console.log('Wake Lock telah dilepaskan');
+                    });
+                } catch (err) {
+                    console.error(`${err.name}, ${err.message}`);
+                    showNotification("Gagal mengaktifkan kunci layar");
+                }
+            } else {
+                showNotification("Browser Anda tidak mendukung kunci layar");
+            }
+        }
+
+        // Set font size
+        function setFontSize(size) {
+            fontSizeClass = size;
+            
+            // Update active button
+            fontSizeButtons.forEach(button => {
+                button.classList.remove('active');
+                if (button.id === 'fontSize' + size.charAt(0).toUpperCase() + size.slice(1)) {
+                    button.classList.add('active');
+                }
+            });
+            
+            // Update font sizes
+            if (size === 'small') {
+                arabicText.style.fontSize = '1.4rem';
+                transliteration.style.fontSize = '0.8rem';
+                translation.style.fontSize = '0.75rem';
+            } else if (size === 'medium') {
+                arabicText.style.fontSize = '1.8rem';
+                transliteration.style.fontSize = '0.9rem';
+                translation.style.fontSize = '0.85rem';
+            } else if (size === 'large') {
+                arabicText.style.fontSize = '2.2rem';
+                transliteration.style.fontSize = '1rem';
+                translation.style.fontSize = '0.95rem';
+            }
+            
+            saveAppData();
+        }
+
+        // Set theme
+        function setTheme(theme) {
+            currentTheme = theme;
+            
+            // Update active theme
+            themeOptions.forEach(option => {
+                option.classList.remove('active');
+                if (option.dataset.theme === theme) {
+                    option.classList.add('active');
+                }
+            });
+            
+            // Update colors
+            if (theme === 'green') {
+                document.documentElement.style.setProperty('--primary-color', darkMode ? '#3BB078' : '#2E8B57');
+                document.documentElement.style.setProperty('--secondary-color', darkMode ? '#2A8C61' : '#1E5631');
+                document.documentElement.style.setProperty('--accent-color', darkMode ? '#4EC68A' : '#4CAF50');
+            } else if (theme === 'blue') {
+                document.documentElement.style.setProperty('--primary-color', darkMode ? '#42A5F5' : '#1976D2');
+                document.documentElement.style.setProperty('--secondary-color', darkMode ? '#2196F3' : '#0D47A1');
+                document.documentElement.style.setProperty('--accent-color', darkMode ? '#64B5F6' : '#2196F3');
+            } else if (theme === 'purple') {
+                document.documentElement.style.setProperty('--primary-color', darkMode ? '#AB47BC' : '#9C27B0');
+                document.documentElement.style.setProperty('--secondary-color', darkMode ? '#8E24AA' : '#7B1FA2');
+                document.documentElement.style.setProperty('--accent-color', darkMode ? '#BA68C8' : '#AB47BC');
+            } else if (theme === 'red') {
+                document.documentElement.style.setProperty('--primary-color', darkMode ? '#EF5350' : '#D32F2F');
+                document.documentElement.style.setProperty('--secondary-color', darkMode ? '#E53935' : '#B71C1C');
+                document.documentElement.style.setProperty('--accent-color', darkMode ? '#FF5252' : '#F44336');
+            }
+            
+            // Update gradient variables
+            document.documentElement.style.setProperty('--gradient-primary', `linear-gradient(135deg, var(--primary-color), var(--secondary-color))`);
+            
+            saveAppData();
+        }
+
+        // Start tutorial overlay
+        function startTutorialOverlay() {
+            tutorialOverlay.classList.add('active');
+            showTutorialStep(1);
+        }
+
+        // Close tutorial overlay
+        function closeTutorialOverlay() {
+            tutorialOverlay.classList.remove('active');
+            tutorialSteps.forEach(step => {
+                step.classList.remove('active');
+            });
+        }
+
+        // Show tutorial step
+        function showTutorialStep(step) {
+            tutorialSteps.forEach(s => {
+                s.classList.remove('active');
+            });
+            document.getElementById('tutorialStep' + step).classList.add('active');
+        }
+
+        // ======== LOCAL STORAGE ========
+
+        // Save application data to localStorage
+        function saveAppData() {
+            const appData = {
+                count: count,
+                currentTarget: currentTarget,
+                vibrationEnabled: vibrationEnabled,
+                soundEnabled: soundEnabled,
+                darkMode: darkMode,
+                selectedDhikr: selectedDhikr,
+                currentSection: currentSection,
+                history: history,
+                dailyTarget: dailyTarget,
+                dailyProgress: dailyProgress,
+                todayTotal: todayTotal,
+                todaySessions: todaySessions,
+                weeklyTotal: weeklyTotal,
+                streak: streak,
+                lastActiveDate: lastActiveDate,
+                translationEnabled: translationEnabled,
+                fontSizeClass: fontSizeClass,
+                currentTheme: currentTheme,
+                screenLockEnabled: screenLockEnabled,
+                reminderEnabled: reminderEnabled
+            };
+            
+            localStorage.setItem('tasbihAppData', JSON.stringify(appData));
+        }
+
+        // Load application data from localStorage
+        function loadAppData() {
+            const appData = localStorage.getItem('tasbihAppData');
+            if (!appData) return;
+            
+            const data = JSON.parse(appData);
+            
+            // Load values
+            count = data.count || 0;
+            currentTarget = data.currentTarget || 33;
+            vibrationEnabled = data.vibrationEnabled !== undefined ? data.vibrationEnabled : true;
+            soundEnabled = data.soundEnabled !== undefined ? data.soundEnabled : true;
+            darkMode = data.darkMode || false;
+            selectedDhikr = data.selectedDhikr || "subhanallah";
+            currentSection = data.currentSection || "tasbihSection";
+            history = data.history || [];
+            dailyTarget = data.dailyTarget || 500;
+            dailyProgress = data.dailyProgress || 0;
+            todayTotal = data.todayTotal || 0;
+            todaySessions = data.todaySessions || 0;
+            weeklyTotal = data.weeklyTotal || 0;
+            streak = data.streak || 0;
+            lastActiveDate = data.lastActiveDate || new Date().toLocaleDateString();
+            translationEnabled = data.translationEnabled !== undefined ? data.translationEnabled : true;
+            fontSizeClass = data.fontSizeClass || "medium";
+            currentTheme = data.currentTheme || "green";
+            screenLockEnabled = data.screenLockEnabled || false;
+            reminderEnabled = data.reminderEnabled || false;
+            
+            // Update UI
+            counter.textContent = count;
+            targetDisplay.textContent = currentTarget;
+            targetButton.innerHTML = `<span class="control-icon">🎯</span><span>Target: ${currentTarget}</span>`;
+            updateVibrateButton();
+            updateSoundButton();
+            
+            // Select the correct dhikr
+            dhikrItems.forEach(item => {
+                if (item.dataset.dhikr === selectedDhikr) {
+                    arabicText.textContent = item.dataset.arabic;
+                    transliteration.textContent = item.dataset.transliteration;
+                    translation.textContent = item.dataset.translation;
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // Update settings toggles
+            vibrationToggle.checked = vibrationEnabled;
+            soundToggle.checked = soundEnabled;
+            darkModeToggle.checked = darkMode;
+            reminderToggle.checked = reminderEnabled;
+            translationToggle.checked = translationEnabled;
+            keepScreenOnToggle.checked = screenLockEnabled;
+            
+            // Update daily target
+            dailyTargetSlider.value = dailyTarget;
+            dailyTargetDisplay.textContent = dailyTarget;
+            
+            // Select current section
+            changeSection(currentSection);
+            
+            // Update dark mode
+            updateDarkMode();
+            
+            // Update translation display
+            updateTranslationDisplay();
+            
+            // Set font size
+            setFontSize(fontSizeClass);
+            
+            // Set theme
+            setTheme(currentTheme);
+            
+            // Toggle screen wake lock if needed
+            if (screenLockEnabled) {
+                toggleScreenWakeLock();
+            }
+        }
+
+        // Check if this is the first visit
+        function isFirstVisit() {
+            return !localStorage.getItem('tasbihAppData');
+        }
+
+        // ======== APPLICATION INITIALIZATION ========
+        // Run any code that should execute on startup
+        
+        // If this is the first visit, show tutorial
+        if (isFirstVisit()) {
+            // Show tutorial after a delay
+            setTimeout(startTutorialOverlay, 2000);
+        }
+
+        // Create a calendar view (simplified example)
+        function createCalendarView() {
+            const calendarView = document.getElementById('calendarView');
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            
+            // Get days in month
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            
+            // Create grid
+            let html = `
+                <h3>${now.toLocaleString('default', { month: 'long' })} ${currentYear}</h3>
+                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px;">
+                    <div style="text-align: center; font-weight: 500; font-size: 0.8rem;">Min</div>
+                    <div style="text-align: center; font-weight: 500; font-size: 0.8rem;">Sen</div>
+                    <div style="text-align: center; font-weight: 500; font-size: 0.8rem;">Sel</div>
+                    <div style="text-align: center; font-weight: 500; font-size: 0.8rem;">Rab</div>
+                    <div style="text-align: center; font-weight: 500; font-size: 0.8rem;">Kam</div>
+                    <div style="text-align: center; font-weight: 500; font-size: 0.8rem;">Jum</div>
+                    <div style="text-align: center; font-weight: 500; font-size: 0.8rem;">Sab</div>
+            `;
+            
+            // Get first day of month
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            
+            // Add empty cells for days before first day of month
+            for (let i = 0; i < firstDay; i++) {
+                html += `<div style="padding: 10px;"></div>`;
+            }
+            
+            // Add days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = `${currentMonth + 1}/${day}/${currentYear}`;
+                
+                // Check if there's history for this day
+                const historyForDay = history.filter(item => {
+                    const itemDate = new Date(item.timestamp);
+                    return itemDate.getDate() === day && 
+                           itemDate.getMonth() === currentMonth && 
+                           itemDate.getFullYear() === currentYear;
+                });
+                
+                // Determine cell color based on activity
+                let bgColor = '#f5f5f5';
+                let textColor = '#333';
+                
+                if (historyForDay.length > 0) {
+                    const totalCount = historyForDay.reduce((sum, item) => sum + item.count, 0);
+                    
+                    if (totalCount > 200) {
+                        bgColor = '#2E8B57';
+                        textColor = 'white';
+                    } else if (totalCount > 100) {
+                        bgColor = '#4CAF50';
+                        textColor = 'white';
+                    } else if (totalCount > 50) {
+                        bgColor = '#8BC34A';
+                        textColor = 'black';
+                    } else {
+                        bgColor = '#C8E6C9';
+                        textColor = 'black';
+                    }
+                }
+                
+                // Current day
+                if (day === now.getDate()) {
+                    html += `<div style="padding: 10px; text-align: center; background-color: ${bgColor}; color: ${textColor}; border-radius: 50%; border: 2px solid #2E8B57;">${day}</div>`;
+                } else {
+                    html += `<div style="padding: 10px; text-align: center; background-color: ${bgColor}; color: ${textColor};">${day}</div>`;
+                }
+            }
+            
+            html += '</div>';
+            calendarView.innerHTML = html;
+        }
+        
+        // Create calendar view
+        createCalendarView();
+    </script>
+</body>
+</html>
